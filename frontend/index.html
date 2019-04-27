@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Air Quality</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Air Quality Module</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h1 class="mt-5">MAM of the Air Quality Module</h1>
+        <p id="balance">Your balance is: </p>
+        <video height="300px" id="preview"></video>
+        <input id="root" class="form-control" type="text" placeholder="Root">
+        <p></p>
+        <input id="key" class="form-control" type="text" placeholder="Key">
+        <p></p>
+        <button id="getData" class="btn btn-primary">Get Data</button>
+        <p></p>
+        <pre id="data"> </pre>
+        <ul class="list-unstyled">
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="load">
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+  <script>
+    $("#load").hide();
+    // ###################
+    //Place your IP here
+    let ip = "localhost";
+
+
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    scanner.addListener('scan', function (content) {
+      if (content.charAt(0) == '"' && content.charAt(content.length - 1 == '"'))
+        content = content.substr(1).slice(0, -1);
+      $("#root").val(content);
+    });
+    Instascan.Camera.getCameras().then(function (cameras) {
+      if (cameras.length > 0) {
+        scanner.start(cameras[0]);
+      } else {
+        console.error('No cameras found.');
+      }
+    }).catch(function (e) {
+      console.error(e);
+    });
+    let address, value, seed, data;
+    seed = "SEED99999999999999999999999999999999999999999999999999999999999999999999999999999";
+    data = {
+      "seed": seed,
+      "to": address,
+      "value": 10,
+      "tag": "SUPERCHARGER",
+      "message": "I NEED SOME STROM"
+    };
+
+    $(document).ready(function () {
+      $("#getData").click(function () {
+
+      });
+    });
+    $("#hash").value = "test";
+    function getBalance() {
+      $.ajax({
+        type: "GET",
+        headers: {
+          'Accept': 'text/plain',
+        },
+        //    dataType: "json",
+        url: "http://" + ip + ":3000/api/getBalanceOfSeed",
+        data: { "seed": seed },
+        success: function (data) {
+          $("#balance").html("Your balance is: " + data);
+          //$("#balance").append(data);
+
+          console.log(data);
+        }
+      });
+      setTimeout(() => { getBalance() }, 3000);
+    }
+    getBalance();
+
+    function getData() {
+      $("#load").show();
+      let data = {};
+      data.root = $("#root").val();
+      data.key = $('#key').val();
+      console.log(data);
+      $("#data").html("");
+      $.ajax({
+        type: "GET",
+        headers: {
+          'Accept': 'text/plain',
+        },
+        //    dataType: "json",
+        url: "http://" + ip + ":3000/api/mamFetch",
+        data: data,
+        success: function (data) {
+          for (let i = 0; i < data.length; i++) {
+            $("#data").append("data package " + i + ": "+ data[i] + "\n");
+          }
+          $("#load").hide();
+        }
+      });
+    }
+
+    $("#getData").click(function () {
+      getData();
+    });
+
+
+  </script>
+
+</body>
+
+</html>
