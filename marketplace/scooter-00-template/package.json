@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@iota/converter": "^1.0.0-beta.21",
+    "@iota/mam": "^0.7.3",
+    "iota.crypto.js": "^0.4.2",
+    "node-fetch": "^2.3.0"
+  }
+}
