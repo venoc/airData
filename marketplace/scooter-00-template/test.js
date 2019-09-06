@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const Mam = require('@iota/mam');
 const { trytesToAscii } = require('@iota/converter');
+
 const userId = 'teGsLbKN33RxY5ZOCv9SNXBQsWf2';
 const config = require('./config.json');
 //const deviceId = 'BD-XDK-Weather';

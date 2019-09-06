@@ -72,6 +72,7 @@
         var data = [
             { location: new google.maps.LatLng(49.94276313, 11.57313181), weight: 2 }
         ];
+        var pointArray = new google.maps.MVCArray(data);
         var dataSan = [
             { location: new google.maps.LatLng(37.782, -122.447), weight: 0.5 },
             new google.maps.LatLng(37.782, -122.445),
@@ -100,8 +101,9 @@
             });
 
             heatmap = new google.maps.visualization.HeatmapLayer({
-                data: data,
-                map: map
+                data: pointArray,
+                map: map,
+                radius: 20
             });
         }
 
@@ -112,7 +114,7 @@
             xmlHttp.send(null);
             let array = JSON.parse(xmlHttp.responseText);
             timestampStart = array[array.length - 1].time;
-            if(timestampStart > timestampEnd){
+            if (timestampStart > timestampEnd) {
                 let array2 = await queryStream(timestampStart, timestampEnd);
                 return Promise.resolve(array.concat(array2));
             } else {
@@ -121,37 +123,54 @@
         }
 
         var mamData = [];
+        let j = 0;
         const showData = raw => {
-            const data = iota.utils.fromTrytes(raw);
-            const jsonData = JSON.parse(data);
-            mamData.push(jsonData);
+            if (raw != null) {
+                const data = iota.utils.fromTrytes(raw);
+                const jsonData = JSON.parse(data);
+                mamData.push(jsonData);
+            }
+            //console.log(jsonData);
+            //mamData.push(jsonData);
         }
-        let promises;
+        let promises = [];
+        let i = 0;
+
         async function readMam(root, key) {
+            console.log("hello");
             try {
-                let payload = await Mam.fetch(root, 'restricted', key, showData);
-                return payload;
+                promises.push(new Promise((resolve, reject) => {
+                    Mam.fetch(root, 'restricted', key, showData).then(res => {
+                        resolve(res);
+                    });
+                }));
             } catch (e) {
-                console.log(e)
+                console.log("err: ", e);
             }
         }
 
         async function writeToMap() {
-            var array = await queryStream('1566511561509', '1566511505835');
-            console.log(array);
+            var array = await queryStream('1566511561509', '1566511545835');
             for (let element of array) {
-                console.log();
-                await readMam(element.root, element.sidekey);
-            } 
+                readMam(element.root, element.sidekey);
+            }
+            //while(mamData.length != array.length) {}
+            await Promise.all(promises);
             console.log(mamData);
-            ///readMam(array[11].root, array[11].sidekey);
+            for (let element of mamData) {
+                console.log(element.data.Pm10 - 90)/10;
+                pointArray.push({ location: new google.maps.LatLng(element.data.latitude, element.data.longitude), weight: (element.data.Pm10 - 90)/10 });
+            }
+            console.log(data);
         }
-
-        writeToMap();
-        Promise.all(promises).then(() => {console.log(mamData)});
-
+        document.addEventListener('DOMContentLoaded', function () {
+            writeToMap();
+        }, false);
         
-        /* readMam('SBZDZBZWRSWJJLXCQMKVDPIBLOXMDCXGUZENPEKZBCQYAQEWSJYYTHHZLIA9COABJUGWGZGZ99JOJPCNF', 'KIHGJCNTTVNEGNPWYPMJPOLRTFRQZYKLCM9CYFIYDWXZPQMBCMRYVAKBCDGINGTPBRLSXDLKCZGVVYFTL'); */
+        //Promise.all(promises).then(() => {console.log(mamData)});
+
+
+        //readMam('BSVPZAYDEDGZ9KQXZIFPALYOLIYCVKALDYACOHUYALOKPULULIHNALOZORGLRCUTVMMZGDONPASGWYQTR', 'SOXW9N9UFDIFNWFZAUDXYLAXACBVFI9NHCARDCQW9ZXPSWXH99GAOPWHHCUTUFGWDW9KL9HKQDEWHPVZG'); 
 
 
         //console.log(queryStream());
@@ -181,7 +200,7 @@
         }
 
         function changeRadius() {
-            heatmap.set('radius', heatmap.get('radius') ? null : 20);
+            heatmap.set('radius', heatmap.get('radius') ? null : 30);
         }
 
         function changeOpacity() {
