@@ -37,5 +37,6 @@
             "timestamp": "0"
         }
 }
+```
 
 The data can now be retrieved again via the IOTA Marketplace.
