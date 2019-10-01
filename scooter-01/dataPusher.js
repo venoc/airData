@@ -19,18 +19,7 @@ const listener = async () => {
     app.listen(8020, function () {
         console.log("Data Pusher is listening on port 8020");
     });
-/*     app.post('/data', function (req, res, next) {
-        var hashedPassword = 'sha1$bb0887c2$1$867093fe48544c79df713aa07e5d54c85f45ae49';
-        if (passwordHash.verify(req.body.pwd, hashedPassword)) {
-            console.log(req.body.data);
-            publish(req.body.data).then(result => { console.log(result); res.json({ msg: "published", result: result }) }).catch(err => { console.log(err); res.json({ msg: "published", result: err }) });
-        } else {
-            res.json({ msg: "wrong password" });
-        }
-    }); */
     app.post('/dataArray', function (req, res, next) {
-        var hashedPassword = 'sha1$bb0887c2$1$867093fe48544c79df713aa07e5d54c85f45ae49';
-        if (passwordHash.verify(req.body.pwd, hashedPassword)) {
             let rec = req.body.data;
             console.log("Incoming Data, " + JSON.stringify(req.body.data.length) + " data points. \n Sending now:");
             for (let i = 0; i < req.body.data.length; i++) {
@@ -50,10 +39,6 @@ const listener = async () => {
                         })
                 });
             }
-
-        } else {
-            res.json({ msg: "wrong password" });
-        }
     });
 }
 
