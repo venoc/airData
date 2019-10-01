@@ -38,7 +38,7 @@ const insertDocuments = function (data, callback) {
 
 async function queryStream(timestampStart, timestampEnd) {
     return new Promise((res, rej) => {
-        var url = 'https://api.marketplace.tangle.works/stream?deviceId=' + "scooter-01" + '&userId=' + 'teGsLbKN33RxY5ZOCv9SNXBQsWf2' + '&time=' + timestampStart;
+        var url = 'https://api.marketplace.tangle.works/stream?deviceId=' + "scooter-01" + '&userId=' + '####USERID####' + '&time=' + timestampStart;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", url, true); // false for synchronous request
         xmlHttp.send(null);

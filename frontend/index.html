@@ -229,77 +229,9 @@
             updateGrid();
         });
 
-        async function queryStream(timestampStart, timestampEnd) {
-            return new Promise((res, rej) => {
-                var url = 'https://api.marketplace.tangle.works/stream?deviceId=' + "scooter-01" + '&userId=' + 'teGsLbKN33RxY5ZOCv9SNXBQsWf2' + '&time=' + timestampStart;
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("GET", url, true); // false for synchronous request
-                xmlHttp.send(null);
-                xmlHttp.onload = function () {
-                    let status = xmlHttp.status; // HTTP response status, e.g., 200 for "200 OK"
-                    let array = JSON.parse(xmlHttp.responseText);
-                    timestampStart = array[array.length - 1].time;
-                    //for(let i = 0; i < array.length; i++) {
-                    //readMam(array[i].root, array[i].sidekey);
-                    readMam(array, 0);
-                    //}
-                    if (timestampStart > timestampEnd) {
-                        setTimeout(() => {
-                            queryStream(timestampStart, timestampEnd).then(result => {
-                                res(array.concat(result));
-
-                            })
-                        }, 8000);
-
-                    } else {
-                        res(array);
-                    }
-                }
-            });
-        }
-
-
-        async function readMam(array, index) {
-            try {
-                promises.push(new Promise((resolve, reject) => {
-                    Mam.fetch(array[index].root, 'restricted', array[index].sidekey, showData, 1).then(res => {
-                        if (index < array.length - 1)
-                            setTimeout(() => { readMam(array, ++index), 100 });
-                        resolve(res);
-                    }).catch(err => {
-                        console.log('err', err)
-                    });
-                }));
-            } catch (e) {
-                console.log("err: ", e);
-            }
-        }
-
-        var mamData = [];
-        let j = 0;
-        const showData = raw => {
-            if (raw != null) {
-                const data = iota.utils.fromTrytes(raw);
-                const jsonData = JSON.parse(data);
-                console.log(jsonData.data.pm25)
-                w = scale(jsonData.data.pm25, 40, 60, 0, 3);
-                if (jsonData.data.latitude != 0 && jsonData.data.longitude != 0)
-                    pointArray.push({ location: new google.maps.LatLng(jsonData.data.latitude, jsonData.data.longitude), weight: w });
-                console.log(w, jsonData.data.latitude, jsonData.data.longitude);
-            }
-        }
-
-        let i = 0;
-
-
-
         function scale(num, in_min, in_max, out_min, out_max) {
             return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
         }
-
-        /*         document.addEventListener('DOMContentLoaded', function () {
-                    writeToMap();
-                }, false); */
 
         let indizes = [];
         let dataTable = [];
