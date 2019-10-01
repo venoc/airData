@@ -1,0 +1,18 @@
+{
+  "name": "mongo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "safeDataFromStreamToDB.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@iota/mam": "^0.7.3",
+    "fs": "0.0.1-security",
+    "iota.crypto.js": "^0.4.2",
+    "mongodb": "^3.3.2",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
