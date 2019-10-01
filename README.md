@@ -1,4 +1,4 @@
-# Airquality
+# Airdata
 See our airdata recorded with a escooter http://airdata.venoc.de.
 ## Sending the data to the tangle
 Since microcomputers have insufficient computing power, a server is hosting the 'dataPusher.js' file which receives the data from the sensor and uploads it to the IOTA Marketplace.
