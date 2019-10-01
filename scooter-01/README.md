@@ -3,6 +3,7 @@
 1. Set your sensorId and the corresponding secretKey in the File 'config.json'.
 2. Set your Public IP of your server
 3. Now you can post the sensor data via the server using a POST command in the following form: 
+```
 {
     "data": [
         {
