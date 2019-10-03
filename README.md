@@ -15,7 +15,7 @@ Open the folder 'frontend' to get a short guide how to do this.
 ## Connecting to the Citopia App
 We also implemented the Citopia API to get access to our airquality sevice through this blockchain powered mobility marketplace app. It supplements the platform designed for mobility with an awareness of a sustainable and healthy existence in the city. 
 
-It runs live on an AWS EC2 t2.micro instance.
+It runs live on an ***AWS EC2 t2.micro*** instance.
 Test it!
 ```
 http://3.16.15.24:8080/register?currentLat=32&currentLng=34.7 
