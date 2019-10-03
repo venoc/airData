@@ -54,8 +54,7 @@ const listener = async () => {
     	app.get("/register", function(req, res) {
       const userId = req.query.userId;
       const serviceId = req.query.serviceId;
-      const currentLat = req.query // here, we need to register service usage in 
-our database
+      const currentLat = req.query // here, we need to register service usage in our database
   let p = {
 	lat: currentLat,
         lng: currentLng,

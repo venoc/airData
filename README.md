@@ -12,3 +12,23 @@ Open the folder 'mongo' to get a short guide how to do this. We also found that 
 In the last step we display the data on our frontend.
 Open the folder 'frontend' to get a short guide how to do this.
 ![](frontend.png)
+## Connecting to the Citopia App
+We also implemented the Citopia API to get access to our airquality sevice through this blockchain powered mobility marketplace app. It supplements the platform designed for mobility with an awareness of a sustainable and healthy existence in the city. 
+
+It runs live on an AWS EC2 t2.micro instance.
+Test it!
+```
+http://3.16.15.24:8080/register?currentLat=32&currentLng=34.7 
+```
+```
+http://3.16.15.24:8080/services
+```
+```
+http://3.16.15.24:8080/bits
+```
+
+If you want to see the code or run it by yourself run the following commands
+1. Change in die directory mongo
+2. call ```npm install```
+3. call ```node api.js```
+4. Use it
