@@ -15,6 +15,7 @@
     "fs": "0.0.1-security",
     "iota.crypto.js": "^0.4.2",
     "mongodb": "^3.3.2",
+    "password-hash": "^1.2.2",
     "xmlhttprequest": "^1.8.0"
   }
 }
