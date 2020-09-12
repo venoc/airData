@@ -4,7 +4,7 @@
     "@iota/mam": "^0.7.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "password-hash": "^1.2.2"
   }
 }
